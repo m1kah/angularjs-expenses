@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en" ng-app="expensesApp">
+  <head>
+    <meta chartset="utf-8">
+    <title>Expenses</title>
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
+    <script src="js/moment.js"></script>
+    
+    <script src="js/controllers.js"></script>
+  </head>
+  <body ng-controller="ExpensesController">
+    <div class="container">
+      <h1>Expenses</h1>
+      <div class="row">
+        <div class="col-md-12">
+        <form action="" class="form-inline">
+          <div class="form-group">
+            <label for="from-date">Date range</label>
+            <input type="text" ng-model="from_date" class="form-control" placeholder="2014-09-01">
+            <input type="text" ng-model="to_date" class="form-control" placeholder="2014-09-30">
+          </div>
+          <button type="button" class="btn btn-default" ng-click="search">Search</button>
+        </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+        <h4>Transactions</h4>
+        <table class="table">
+          <tr>
+            <th></th>
+            <th>Booking date</th>
+            <th>Account / Card</th>
+            <th>Receiver</th>
+            <th class="text-right">Amount</th>
+          </tr>
+          <tr ng-repeat="tx in transactions | orderBy:predicate">
+            <td><input type="checkbox"></td>
+            <td>{{tx.booking_date}}</td>
+            <td>{{tx.account_number || tx.card_number}}</td>
+            <td>{{tx.receiver}}</td>
+            <td class="text-right ">{{tx.amount}} €</td>
+          </tr>
+        </table>
+        </div>
+      </div>
+      <div class="row">
+        <form action="upload" method="post" enctype="multipart/form-data">
+          <input type="file" name='fileUploaded'>
+          <input type="submit" value="Upload &rarr;">
+        </form>        
+      </div>
+    </div>
+  </body>
+</html>
