@@ -11,22 +11,35 @@
     
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
     <script src="js/moment.js"></script>
-    
+    <script src="js/d3.js"></script>
+        
     <script src="js/controllers.js"></script>
   </head>
   <body ng-controller="ExpensesController">
     <div class="container">
       <h1>Expenses</h1>
       <div class="row">
+        <div class="col-md-6">
+          <form action="" class="form-inline">
+            <div class="form-group">
+              <input type="text" ng-model="from_date" class="form-control" placeholder="2014-09-01">
+              <input type="text" ng-model="to_date" class="form-control" placeholder="2014-09-30">
+            </div>
+            <button type="button" class="btn btn-default" ng-click="search()">Search</button>
+          </form>
+        </div>
+        <div class="col-md-6">
+          <div id="category-graph"></div>
+        </div>
+      </div>
+      <div class="row">
         <div class="col-md-12">
-        <form action="" class="form-inline">
-          <div class="form-group">
-            <label for="from-date">Date range</label>
-            <input type="text" ng-model="from_date" class="form-control" placeholder="2014-09-01">
-            <input type="text" ng-model="to_date" class="form-control" placeholder="2014-09-30">
-          </div>
-          <button type="button" class="btn btn-default" ng-click="search">Search</button>
-        </form>
+          <button type="button" class="btn btn-default" ng-click="updateCategory()">Update</button>
+          <ul>
+            <li ng-repeat="category in categories">
+              {{category.name}} {{category.amount}}
+            </li>
+          </ul>
         </div>
       </div>
       <div class="row">
@@ -38,14 +51,25 @@
             <th>Booking date</th>
             <th>Account / Card</th>
             <th>Receiver</th>
+            <th>Category</th>
             <th class="text-right">Amount</th>
           </tr>
           <tr ng-repeat="tx in transactions | orderBy:predicate">
             <td><input type="checkbox"></td>
-            <td>{{tx.booking_date}}</td>
+            <td>{{tx.booking_date | date:'yyyy-MM-dd'}}</td>
             <td>{{tx.account_number || tx.card_number}}</td>
             <td>{{tx.receiver}}</td>
-            <td class="text-right ">{{tx.amount}} €</td>
+            <td>
+              <select class="form-control" ng-model="tx.category">
+                <option></option>
+                <option>Food</option>
+                <option>Home</option>
+                <option>Lunch</option>
+                <option>Entertainment</option>
+                <option>Transportation</option>
+              </select>
+            </td>
+            <td class="text-right ">{{tx.amount | number : 2}} €</td>
           </tr>
         </table>
         </div>
@@ -57,5 +81,6 @@
         </form>        
       </div>
     </div>
+    <script src="js/graph.js"></script>
   </body>
 </html>
