@@ -49,7 +49,8 @@
           <tr>
             <th></th>
             <th>Booking date</th>
-            <th>Account / Card</th>
+            <th>From account</th>
+            <th>To account / Card</th>
             <th>Receiver</th>
             <th>Category</th>
             <th class="text-right">Amount</th>
@@ -57,7 +58,8 @@
           <tr ng-repeat="tx in transactions | orderBy:predicate">
             <td><input type="checkbox"></td>
             <td>{{tx.booking_date | date:'yyyy-MM-dd'}}</td>
-            <td>{{tx.account_number || tx.card_number}}</td>
+            <td>{{tx.from_account_number}}</td>
+            <td>{{tx.to_account_number || tx.card_number}}</td>
             <td>{{tx.receiver}}</td>
             <td>
               <select class="form-control" ng-model="tx.category">

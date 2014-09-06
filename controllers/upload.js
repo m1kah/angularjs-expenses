@@ -26,6 +26,7 @@ module.exports = {
   },
   
   index: function(req, res) {
+    console.log(req.from_date, req.to_date);
     var dateQuery = {}
     var query = {};
     
@@ -37,6 +38,8 @@ module.exports = {
       dateQuery.$lte = moment(req.to_date).toDate();
       query.booking_date = dateQuery;
     }
+    
+    query.booking_date = { $gte: moment('2014-08-01').toDate() };
     
     console.log('Finding transactions with query:', query);
     
