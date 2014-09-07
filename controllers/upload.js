@@ -31,16 +31,18 @@ module.exports = {
     var dateQuery = {}
     var query = {};
     
-    if (req.from_date) {
-      dateQuery.$gte = moment(req.from_date).toDate();
+    if (req.query.from_date) {
+      dateQuery.$gte = moment(req.query.from_date).toDate();
       query.booking_date = dateQuery;
+      console.log('req.from_date', req.query.from_date);
     }
-    if (req.to_date) {
-      dateQuery.$lte = moment(req.to_date).toDate();
+    if (req.query.to_date) {
+      dateQuery.$lte = moment(req.query.to_date).toDate();
       query.booking_date = dateQuery;
+      console.log('req.to_date', req.query.to_date);
     }
     
-    query.booking_date = { $gte: moment('2014-08-01').toDate() };
+    // query.booking_date = { $gte: moment('2014-08-01').toDate() };
     
     console.log('Finding transactions with query:', query);
     

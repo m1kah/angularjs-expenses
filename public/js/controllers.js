@@ -4,11 +4,6 @@ var expensesApp = angular.module('expensesApp', []);
 expensesApp.controller('ExpensesController', function($scope, $http) {
   $scope.availableCategories = [ 'Food', 'Home', 'Lunch', 'Entertainment', 'Transportation' ];
   
-  $http.get('api/transactions').success(function(data) {
-    $scope.transactions = data;
-    $scope.updateCategory();
-  });
-  
   $scope.predicate = 'receiver';
   $scope.from_date = '2014-08-01'; // moment.startOf('month');
   $scope.to_date = '2014-08-30'; // moment.endOf('month');
@@ -16,10 +11,11 @@ expensesApp.controller('ExpensesController', function($scope, $http) {
   $scope.search = function() {
     $http.get('api/transactions', {
       params: {
-        from_date: moment($scope.from_date).toDate(),
-        to_date: moment($scope.to_date).toDate()
+        from_date: $scope.from_date,
+        to_date: $scope.to_date
     }}).success(function(data) {
       $scope.transactions = data;
+      $scope.updateCategory();
     });
   };
   
@@ -37,7 +33,7 @@ expensesApp.controller('ExpensesController', function($scope, $http) {
     var category = { name: categoryName, amount: 0.00 };
     $scope.categories.push(category);
     return category;
-  }
+  };
     
   $scope.updateCategory = function() {
     $scope.categories = [];
@@ -59,4 +55,6 @@ expensesApp.controller('ExpensesController', function($scope, $http) {
       $scope.updateCategory();
     });
   };
+  
+  $scope.search();
 });
