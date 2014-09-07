@@ -11,6 +11,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 var upload = require('./controllers/upload');
 app.route('/upload').post(upload.post);
 app.route('/api/transactions').get(upload.index);
+app.route('/api/transactions/:id').put(upload.update);
 
 mongoose.connect('mongodb://localhost/expenses');
 mongoose.connection.on('open', function() {

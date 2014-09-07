@@ -3,6 +3,8 @@ var md5 = require('MD5');
 var fs = require('fs-extra');
 var transactionModel = require('../app/transaction_model');
 var moment = require('moment');
+var mongoose = require('mongoose');
+var ObjectId = mongoose.Types.ObjectId;
 
 module.exports = {
   post: function(req, res) {
@@ -26,7 +28,6 @@ module.exports = {
   },
   
   index: function(req, res) {
-    console.log(req.from_date, req.to_date);
     var dateQuery = {}
     var query = {};
     
@@ -45,6 +46,24 @@ module.exports = {
     
     transactionModel.Transaction.find(query, function(err, data) {
       res.json(data);
+    });
+  },
+  
+  update: function(req, res) {
+    var id = ObjectId.createFromHexString(req.params.id);
+    var category = req.query.category;
+    console.log('put category %s = %s', id, category);
+    
+    transactionModel.Transaction.findOne(id, function(err, transaction) {
+      if (err) {
+        console.log('error', err);
+        res.status(500).send(err);
+      } else {
+        transaction.category = category;
+        transaction.save();
+        console.log('transaction %s category set to %s', transaction._id, transaction.category);
+        res.json(transaction);
+      }
     });
   }
 };

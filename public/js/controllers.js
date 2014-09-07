@@ -2,8 +2,11 @@
 var expensesApp = angular.module('expensesApp', []);
 
 expensesApp.controller('ExpensesController', function($scope, $http) {
+  $scope.availableCategories = [ 'Food', 'Home', 'Lunch', 'Entertainment', 'Transportation' ];
+  
   $http.get('api/transactions').success(function(data) {
     $scope.transactions = data;
+    $scope.updateCategory();
   });
   
   $scope.predicate = 'receiver';
@@ -48,5 +51,12 @@ expensesApp.controller('ExpensesController', function($scope, $http) {
         console.log('category', tx.category);
       }
     }
+  };
+  
+  $scope.setCategory = function(tx) {
+    console.log('Updating category on', tx);
+    $http.put('api/transactions/' + tx._id, {}, { params: { category: tx.category } }).success(function(data) {
+      $scope.updateCategory();
+    });
   };
 });
