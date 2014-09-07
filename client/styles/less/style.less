@@ -69,3 +69,25 @@ body {
   -webkit-background-clip: padding;  /* Safari 4? Chrome 6? */
   background-clip: padding-box;      /* Firefox 4, Safari 5, Opera 10, IE 9 */
 }
+
+.category-chart {
+  background: transparent;
+  
+  div {
+    width: 0;
+    transition: all 1s ease-out;
+    -moz-transition: all 1s ease-out;
+    -webkit-transition: all 1s ease-out;
+  }
+  
+  div {
+    font-size: 10px;
+    background-color: steelblue;
+    line-height: 22px;
+    min-height: 36px;
+    text-align: right;
+    padding: 7px;
+    margin: 1px 0px;
+    color: white;
+  }
+}
