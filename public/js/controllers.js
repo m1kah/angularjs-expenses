@@ -22,21 +22,26 @@ expensesApp.controller('ExpensesController', function($scope, $http) {
   var getCategory = function(categoryName) {
     for (var i = 0; i < $scope.categories.length; i++) {
       var category = $scope.categories[i];
-      console.log('category.name: ' + category.name + ', categoryName: ' + categoryName);
+      // console.log('category.name: ' + category.name + ', categoryName: ' + categoryName);
       if (category.name === categoryName) {
         return category;
       }
     }
     
-    console.log('No categories, creating new', categoryName);
+    // console.log('No categories, creating new', categoryName);
     
     var category = { name: categoryName, amount: 0.00 };
     $scope.categories.push(category);
     return category;
   };
-    
+  
   $scope.updateCategory = function() {
     $scope.categories = [];
+    
+    for (var i = 0; i < $scope.availableCategories.length; i++) {
+      var category = getCategory($scope.availableCategories[i]);
+      category.amount = 0.0;
+    }
     
     for (var i = 0; i < $scope.transactions.length; i++) {
       var tx = $scope.transactions[i];
@@ -44,7 +49,7 @@ expensesApp.controller('ExpensesController', function($scope, $http) {
       if (tx.category) {
         var category = getCategory(tx.category);
         category.amount += tx.amount;
-        console.log('category', tx.category);
+        // console.log('category', tx.category);
       }
     }
   };
