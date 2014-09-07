@@ -33,13 +33,14 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-3">
+          <table class="table">
+            <tr ng-repeat="category in categories">
+              <th>{{category.name}}</th>
+              <td class="text-right">{{category.amount | number : 2}} €</td>
+            </tr>
+          </table>
           <button type="button" class="btn btn-default" ng-click="updateCategory()">Update</button>
-          <ul>
-            <li ng-repeat="category in categories">
-              {{category.name}} {{category.amount}}
-            </li>
-          </ul>
         </div>
       </div>
       <div class="row">
