@@ -10,6 +10,7 @@
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-route.min.js"></script>
     <script src="js/moment.js"></script>
     <script src="js/d3.js"></script>
         
@@ -18,68 +19,13 @@
   <body ng-controller="ExpensesController">
     <div class="container">
       <ul class="nav nav-tabs" role="tablist">
-        <li class="active"><a href="#">Transactions</a></li>
-        <li><a href="#">Year</a></li>
+        <li class="active"><a href="#/transactions">Transactions</a></li>
+        <li><a href="#/year">Year</a></li>
         <li><a href="#">Categories</a></li>
       </ul>
-      <h1>Transactions</h1>
-      <div class="row">
-        <div class="col-md-6">
-          <form action="" class="form-inline">
-            <div class="form-group">
-              <input type="text" ng-model="from_date" class="form-control" placeholder="2014-09-01">
-              <input type="text" ng-model="to_date" class="form-control" placeholder="2014-09-30">
-            </div>
-            <button type="button" class="btn btn-default" ng-click="search()">Search</button>
-          </form>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-3">
-          <table class="table">
-            <tr ng-repeat="category in categories">
-              <th>{{category.name}}</th>
-              <td class="text-right">{{category.amount | number : 2}} €</td>
-            </tr>
-          </table>
-        </div>
-        <div class="col-md-7">
-          <bars-chart chart-data="chartData"></bars-chart>          
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-12">
-        <h4>Query results</h4>
-        <table class="table">
-          <tr>
-            <th>Booking date</th>
-            <th>From account</th>
-            <th>To account / Card</th>
-            <th>Receiver</th>
-            <th>Category</th>
-            <th class="text-right">Amount</th>
-          </tr>
-          <tr ng-repeat="tx in transactions | orderBy:predicate">
-            <td>{{tx.booking_date | date:'yyyy-MM-dd'}}</td>
-            <td>{{tx.from_account_number}}</td>
-            <td>{{tx.to_account_number || tx.card_number}}</td>
-            <td>{{tx.receiver}}</td>
-            <td>
-              <select class="form-control" ng-model="tx.category" ng-options="category for category in availableCategories" ng-change="setCategory(tx)">
-                <option value=""></option>
-              </select>
-            </td>
-            <td class="text-right ">{{tx.amount | number : 2}} €</td>
-          </tr>
-        </table>
-        </div>
-      </div>
-      <div class="row">
-        <form action="upload" method="post" enctype="multipart/form-data">
-          <input type="file" name='fileUploaded'>
-          <input type="submit" value="Upload &rarr;">
-        </form>        
-      </div>
+      
+      <div ng-view></div>
+      
     </div>
   </body>
 </html>

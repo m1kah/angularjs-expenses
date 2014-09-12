@@ -1,5 +1,5 @@
 
-var expensesApp = angular.module('expensesApp', []);
+var expensesApp = angular.module('expensesApp', ['ngRoute']);
 
 expensesApp.controller('ExpensesController', function($scope, $http) {
   $scope.availableCategories = [ 'Food', 'Home', 'Lunch', 'Entertainment', 'Transportation' ];
@@ -105,3 +105,20 @@ expensesApp.directive('barsChart', function($parse) {
     }
   };
 });
+
+expensesApp.config(['$routeProvider',
+  function($routeProvider) {
+    $routeProvider
+      .when('/transactions', {
+        templateUrl: 'partials/transactions.html',
+        controller: 'ExpensesController'
+      })
+      .when('/year', {
+        templateUrl: 'partials/year.html',
+        controller: 'YearController'
+      })
+      .otherwise({
+        redirectTo: '/transactions'
+      });
+  }
+]);
