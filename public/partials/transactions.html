@@ -47,7 +47,7 @@
             <td>{{tx.to_account_number || tx.card_number}}</td>
             <td>{{tx.receiver}}</td>
             <td>
-              <select class="form-control" ng-model="tx.category" ng-options="category for category in availableCategories" ng-change="setCategory(tx)">
+              <select class="form-control" ng-model="tx.category" ng-options="category for category in selectableCategories" ng-change="setCategory(tx)">
                 <option value=""></option>
               </select>
             </td>

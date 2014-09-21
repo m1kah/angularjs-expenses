@@ -17,7 +17,7 @@ var Transaction = new Schema({
   message: { type: String },
   card_number: { type: String },
   receipt: { type: String },
-  category: { type: String}
+  category: { type: String }
 });
 
 module.exports = {

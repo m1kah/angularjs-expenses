@@ -3,6 +3,7 @@ var expensesApp = angular.module('expensesApp', ['ngRoute']);
 
 expensesApp.controller('ExpensesController', function($scope, $http) {
   $scope.availableCategories = [ 'Food', 'Home', 'Lunch', 'Entertainment', 'Transportation' ];
+  $scope.selectableCategories = [];
   $scope.chartData = [0.0, 0.0, 0.0, 0.0, 0.0];
   
   $scope.predicate = 'receiver';
@@ -17,6 +18,17 @@ expensesApp.controller('ExpensesController', function($scope, $http) {
     }}).success(function(data) {
       $scope.transactions = data;
       $scope.updateCategory();
+    });
+  };
+  
+  $scope.findAllCategories = function() {
+    $http.get('api/categories', {}).success(function(data) {
+      $scope.selectableCategories = [];
+      if (data) {
+        for (var i = 0; i < data.length; i++) {
+          $scope.selectableCategories.push(data[i].name);
+        }
+      }
     });
   };
   
@@ -67,6 +79,7 @@ expensesApp.controller('ExpensesController', function($scope, $http) {
     });
   };
   
+  $scope.findAllCategories();
   $scope.search();
 });
 
