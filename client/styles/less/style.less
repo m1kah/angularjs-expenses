@@ -61,6 +61,10 @@ body {
   .background-size(cover);
 }
 
+html, body {
+  height: 100%;
+}
+
 .container {
   background-color: #fff;
   border-left: 20px solid rgba(0, 0, 0, 0.15);
@@ -68,6 +72,8 @@ body {
   -moz-background-clip: padding;     /* Firefox 3.6 */
   -webkit-background-clip: padding;  /* Safari 4? Chrome 6? */
   background-clip: padding-box;      /* Firefox 4, Safari 5, Opera 10, IE 9 */
+  
+  min-height: 100%;
 }
 
 .category-chart {
@@ -90,4 +96,8 @@ body {
     margin: 1px 0px;
     color: white;
   }
+}
+
+.ng-invalid {
+  .form-control-validation(@state-danger-text; @state-danger-text; @state-danger-bg);
 }

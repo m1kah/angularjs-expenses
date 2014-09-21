@@ -1,0 +1,44 @@
+<ul class="nav nav-tabs" role="tablist">
+  <li><a href="#/transactions">Transactions</a></li>
+  <li><a href="#/year">Year</a></li>
+  <li class="active"><a href="#/categories">Categories</a></li>
+</ul>
+
+<h1>Categories</h1>
+<div class="row">
+  <div class="col-md-12">
+    <table class="table">
+      <tr>
+        <th>Category</th>
+        <th>Transactions</th>
+        <th>Actions</th>
+      </tr>
+      <tr ng-repeat="category in categories">
+        <td>{{category.name}}</td>
+        <td>0</td>
+        <td>
+          <button class="btn btn-default">Rename</button>
+          <button class="btn btn-default" ng-click="removeCategory(category)">Remove</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-5">
+      <form name="categoryForm" role="form">
+        <div class="input-group">
+          <input type="text" class="form-control" name="newCategoryName" ng-model="newCategoryName" ng-pattern="/^[A-Za-z0-9\-_]*$/" ng-minlength="3" ng-maxlength="32" ng-keypress="($event.which === 13)?addCategory():0">
+          <span class="input-group-btn">
+            <button class="btn btn-primary" type="button" ng-click="addCategory()">Add</button>
+          </span>
+        </div>
+          
+          <span class="help-block" ng-show="categoryForm.newCategoryName.$error.minlength">Min length is 3</span>
+          <span class="help-block" ng-show="categoryForm.newCategoryName.$error.maxlength">Max length is 32</span>
+          <span class="help-block" ng-show="categoryForm.newCategoryName.$error.pattern">Allowed characters are alphabeths, numbers, _ and -</span>
+          
+          
+      </form>
+  </div>
+</div>

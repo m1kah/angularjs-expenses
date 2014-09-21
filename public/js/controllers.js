@@ -70,6 +70,40 @@ expensesApp.controller('ExpensesController', function($scope, $http) {
   $scope.search();
 });
 
+expensesApp.controller('CategoryController', function($scope, $http) {
+  $scope.categories = [];
+  $scope.newCategoryName = '';
+  
+  $scope.findAll = function() {
+    $http.get('api/categories', {}).success(function(data) {
+      $scope.categories = data;
+    });
+  };
+  
+  $scope.addCategory = function() {
+    console.log('Adding', $scope.newCategoryName);
+    
+    if ($scope.newCategoryName) {
+      var category = $scope.newCategoryName;
+      $scope.newCategoryName = '';
+      console.log('Posting category', category);
+      $http.post('api/categories/', { name: category }).success(function(data) {
+        console.log('post done');
+        $scope.findAll();
+      });
+    }
+  };
+  
+  $scope.removeCategory = function(category) {
+    $http.delete('api/categories/' + category._id, {}).success(function(data) {
+      console.log('delete done');
+      $scope.findAll();
+    });
+  };
+  
+  $scope.findAll();
+});
+
 expensesApp.directive('barsChart', function($parse) {
   return {
     restrict: 'E',
@@ -116,6 +150,10 @@ expensesApp.config(['$routeProvider',
       .when('/year', {
         templateUrl: 'partials/year.html',
         controller: 'YearController'
+      })
+      .when('/categories', {
+        templateUrl: 'partials/categories.html',
+        controller: 'CategoryController'
       })
       .otherwise({
         redirectTo: '/transactions'

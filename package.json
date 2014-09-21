@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "MD5": "^1.2.1",
+    "body-parser": "^1.8.3",
     "connect-busboy": "0.0.1",
     "express": "^4.7.4",
     "fast-csv": "^0.4.2",
