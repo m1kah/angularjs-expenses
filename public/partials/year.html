@@ -3,3 +3,21 @@
   <li class="active"><a href="#/year">Year</a></li>
   <li><a href="#/categories">Categories</a></li>
 </ul>
+
+<h1>Year</h1>
+<div class="row">
+  <div class="col-md-12">
+    <table class="table">
+      <tr>
+        <th class="text-center" ng-repeat="month in months">
+          {{month.readableMonth}}
+        </th>
+      </tr>
+      <tr>
+        <td class="text-center" ng-repeat="month in months">
+          {{month.total | number: 2}}
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>

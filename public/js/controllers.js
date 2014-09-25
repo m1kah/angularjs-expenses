@@ -117,6 +117,26 @@ expensesApp.controller('CategoryController', function($scope, $http) {
   $scope.findAll();
 });
 
+expensesApp.controller('YearController', function($scope, $http) {
+  $scope.months = [];
+  
+  for (var i = 0; i < 12; i++) {
+    $scope.months.push( { month: i, total: 0.0 } );
+  }
+  
+  $scope.calculate = function() {
+    $http.get('api/year', {}).success(function(data) {
+      $scope.months = data;
+      
+      for (var i = 0; i < $scope.months.length; i++) {
+        $scope.months[i].readableMonth = moment().month($scope.months[i].month).format('MMM');
+      }
+    });
+  };
+  
+  $scope.calculate();
+});
+
 expensesApp.directive('barsChart', function($parse) {
   return {
     restrict: 'E',

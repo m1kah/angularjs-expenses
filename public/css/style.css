@@ -6231,3 +6231,19 @@ body {
 .ng-invalid .form-control-feedback {
   color: #a94442;
 }
+.months {
+  margin-top: 12px;
+  padding-top: 8px;
+  color: #eee;
+  background-color: #5C5E68;
+  height: 65px;
+}
+.months .month {
+  text-align: center;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+.months .month .total {
+  padding-top: 10px;
+  font-size: 12px;
+}

@@ -19,6 +19,9 @@ app.route('/api/categories/').get(category.index);
 app.route('/api/categories/').post(category.post);
 app.route('/api/categories/:id').delete(category.delete);
 
+var year = require('./controllers/year');
+app.route('/api/year').get(year.index);
+
 mongoose.connect('mongodb://localhost/expenses');
 mongoose.connection.on('open', function() {
   console.log('Connected to mongoose');

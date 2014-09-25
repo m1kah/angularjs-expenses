@@ -101,3 +101,21 @@ html, body {
 .ng-invalid {
   .form-control-validation(@state-danger-text; @state-danger-text; @state-danger-bg);
 }
+
+.months {
+  margin-top: 12px;
+  padding-top: 8px;
+  color: #eee;
+  background-color: #5C5E68;
+  height: 65px;
+  .month {
+    text-align: center;    
+    padding-left: 2px;
+    padding-right: 2px;
+    
+    .total {
+      padding-top: 10px;
+      font-size: @font-size-small;
+    }
+  }
+}
