@@ -18,6 +18,7 @@ var category = require('./controllers/category');
 app.route('/api/categories/').get(category.index);
 app.route('/api/categories/').post(category.post);
 app.route('/api/categories/:id').delete(category.delete);
+app.route('/api/categories/:id').put(category.update);
 
 var year = require('./controllers/year');
 app.route('/api/year').get(year.index);

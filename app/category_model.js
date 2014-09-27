@@ -3,7 +3,8 @@ var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 
 var Category = new Schema({
-  name: { type: String }
+  name: { type: String },
+  isNotExpense: { type: Boolean }
 });
 
 module.exports = {

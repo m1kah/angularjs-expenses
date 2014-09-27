@@ -1,32 +1,54 @@
+var categoryModel= require('../app/category_model');
 var transactionModel = require('../app/transaction_model');
 var moment = require('moment');
 var mongoose = require('mongoose');
 var ObjectId = mongoose.Types.ObjectId;
 
-var calculateTotals = function(transactions) {
-  var result = {
-    total: 0.0,
-    transactions: 0,
-    categories: []
-  };
-  
-  for (var i = 0; i < transactions.length; i++) {
-    var tx = transactions[i];
-    result.transactions++;
-    result.total += tx.amount;
+var calculateTotals = function(transactions, callback) {
+  categoryModel.Category.find().lean().exec(function(err, categories) {
+    var result = {
+      total: 0.0,
+      transactions: 0
+    };
     
-    var index = result.categories.map(function(c) { return c.name; }).indexOf(tx.category);
+    for (var i = 0; i < transactions.length; i++) {
+      var tx = transactions[i];
+      result.transactions++;
+      
+      var searchFor = 'Other';
+      if (tx.category) {
+        searchFor = tx.category;
+      }
     
-    if (index >= 0) {
-      result.categories[index].amount += tx.amount;
-    } else {
-      result.categories.push({ name: tx.category, amount: tx.amount });
+      var index = categories.map(function(c) { return c.name; }).indexOf(searchFor);
+      var amount = tx.amount;
+      if (index >= 0) {
+        var category = categories[index];
+        
+        if (category.isNotExpense) {
+          amount = -amount;
+        }
+        if (category.amount) {
+          category.amount += amount;
+        } else {
+          category.amount = amount;
+        }
+      } else {
+        if (tx.category) {
+          categories.push({ name: tx.category, amount: amount });
+        } else {
+          categories.push({ name: 'Other', amount: amount });
+        }
+      }
+    
+      result.total += amount;
     }
-  }
-  
-  console.log('Result calculated for %d transactions', transactions.length);
-  
-  return result;
+    
+    result.categories = categories;
+    console.log('Result calculated for %d transactions', transactions.length);
+    
+    callback(result);
+  });
 }
 
 var findTransactionAndCalculate = function(monthIndex, res, results) {
@@ -44,16 +66,18 @@ var findTransactionAndCalculate = function(monthIndex, res, results) {
   console.log('Finding transactions for %d with query %j', monthIndex, query);
   
   var transactionInMonth = transactionModel.Transaction.find(query, function(err, data) {
-    var result = calculateTotals(data);
-    result.month = monthIndex;
-    results[monthIndex] = result;
+    calculateTotals(data, function(result) {
+      result.month = monthIndex;
+      results[monthIndex] = result;
     
-    if (monthIndex < 11) {
-      findTransactionAndCalculate(monthIndex + 1, res, results);
-    } else {
-      console.log('Done find transactions');
-      res.send(results).status(200).end();
-    }
+      if (monthIndex < 11) {
+        findTransactionAndCalculate(monthIndex + 1, res, results);
+      } else {
+        console.log('Done find transactions');
+        res.send(results).status(200).end();
+      }
+      
+    });
   });
 };
 

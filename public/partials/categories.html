@@ -11,11 +11,15 @@
       <tr>
         <th>Category</th>
         <th>Transactions</th>
+        <th>Options</th>
         <th>Actions</th>
       </tr>
       <tr ng-repeat="category in categories">
         <td>{{category.name}}</td>
         <td>0</td>
+        <td>
+          <button class="btn btn-default" ng-class="{active: category.isNotExpense}" ng-click="toggleIsNotExpense(category)">Is not expense</button>
+        </td>
         <td>
           <button class="btn btn-default">Rename</button>
           <button class="btn btn-default" ng-click="removeCategory(category)">Remove</button>
@@ -37,8 +41,6 @@
           <span class="help-block" ng-show="categoryForm.newCategoryName.$error.minlength">Min length is 3</span>
           <span class="help-block" ng-show="categoryForm.newCategoryName.$error.maxlength">Max length is 32</span>
           <span class="help-block" ng-show="categoryForm.newCategoryName.$error.pattern">Allowed characters are alphabeths, numbers, _ and -</span>
-          
-          
       </form>
   </div>
 </div>

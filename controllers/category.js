@@ -40,5 +40,22 @@ module.exports = {
         res.status(200).end();
       }
     });
+  },
+  
+  update: function(req, res) {
+    console.log('updating %s', req.body.category._id);
+    var category = req.body.category;
+    var id = ObjectId.createFromHexString(category._id);
+    
+    categoryModel.Category.update({ _id: id }, category, {}, function(err, updateCount) {
+      console.log('Updated %d documents', updateCount);
+      
+      if (err) {
+        console.log('error', err);
+        res.status(500).send(err);
+      } else {
+        res.status(200).end();
+      }
+    });
   }
 };

@@ -114,6 +114,19 @@ expensesApp.controller('CategoryController', function($scope, $http) {
     });
   };
   
+  $scope.toggleIsNotExpense = function(category) {
+    if (category.isNotExpense) {
+      category.isNotExpense = !category.isNotExpense;
+    } else {
+      category.isNotExpense = true;
+    }
+    
+    $http.put('api/categories/' + category._id, { category: category }).success(function(data) {
+      console.log('is not expense status updated');
+      $scope.findAll();
+    });
+  };
+  
   $scope.findAll();
 });
 
