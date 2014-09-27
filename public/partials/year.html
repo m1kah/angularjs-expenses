@@ -9,13 +9,21 @@
   <div class="col-md-12">
     <table class="table">
       <tr>
+        <th></th>
         <th class="text-center" ng-repeat="month in months">
           {{month.readableMonth}}
         </th>
       </tr>
       <tr>
+        <th>Total</th>
         <td class="text-center" ng-repeat="month in months">
           {{month.total | number: 2}}
+        </td>
+      </tr>
+      <tr ng-repeat="category in categories">
+        <th>{{category}}</th>
+        <td class="text-center" ng-repeat="month in months">
+          {{month.categoryForName(month, category) | number : 2}}
         </td>
       </tr>
     </table>

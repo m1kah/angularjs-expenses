@@ -119,6 +119,8 @@ expensesApp.controller('CategoryController', function($scope, $http) {
 
 expensesApp.controller('YearController', function($scope, $http) {
   $scope.months = [];
+  $scope.categories = [];
+  $scope.rows = [];
   
   for (var i = 0; i < 12; i++) {
     $scope.months.push( { month: i, total: 0.0 } );
@@ -129,8 +131,38 @@ expensesApp.controller('YearController', function($scope, $http) {
       $scope.months = data;
       
       for (var i = 0; i < $scope.months.length; i++) {
-        $scope.months[i].readableMonth = moment().month($scope.months[i].month).format('MMM');
-      }
+        var month = $scope.months[i];
+        month.readableMonth = moment().month($scope.months[i].month).format('MMM');
+        
+        var categories = month.categories;
+        for (var j = 0; j < categories.length; j++) {
+          var category = categories[j];
+          if ($scope.categories.indexOf(category.name) < 0) {
+            $scope.categories.push(category.name);
+          }
+        }
+        
+        month.categoryForName = function(month, category) {
+          if (month.categories.length === 0) {
+            return 0.00;
+          }
+    
+          var categoryIndex = -1;
+    
+          for (var j = 0; j < month.categories.length; j++) {
+            if (month.categories[j].name === category) {
+              categoryIndex = j;
+              break;
+            }
+          }
+    
+          if (categoryIndex < 0) {
+            return 0.00;
+          }
+    
+          return month.categories[categoryIndex].amount;
+        }; // function
+      } // for
     });
   };
   
