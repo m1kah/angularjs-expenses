@@ -114,12 +114,8 @@ expensesApp.controller('CategoryController', function($scope, $http) {
     });
   };
   
-  $scope.toggleIsNotExpense = function(category) {
-    if (category.isNotExpense) {
-      category.isNotExpense = !category.isNotExpense;
-    } else {
-      category.isNotExpense = true;
-    }
+  $scope.setType = function(category, type) {
+    category.type = type;
     
     $http.put('api/categories/' + category._id, { category: category }).success(function(data) {
       console.log('is not expense status updated');
@@ -139,6 +135,18 @@ expensesApp.controller('YearController', function($scope, $http) {
     $scope.months.push( { month: i, total: 0.0 } );
   }
   
+  $scope.expense = function(category) {
+    return category.type !== 1 && category.type !== 2;
+  };
+  
+  $scope.income = function(category) {
+    return category.type === 1;
+  };
+  
+  $scope.saving = function(category) {
+    return category.type === 2;
+  };
+  
   $scope.calculate = function() {
     $http.get('api/year', {}).success(function(data) {
       $scope.months = data;
@@ -150,8 +158,11 @@ expensesApp.controller('YearController', function($scope, $http) {
         var categories = month.categories;
         for (var j = 0; j < categories.length; j++) {
           var category = categories[j];
-          if ($scope.categories.indexOf(category.name) < 0) {
-            $scope.categories.push(category.name);
+          
+          var index = $scope.categories.map(function(c) { return c.name; }).indexOf(category.name);
+          
+          if (index < 0) {
+            $scope.categories.push(category);
           }
         }
         
@@ -163,7 +174,7 @@ expensesApp.controller('YearController', function($scope, $http) {
           var categoryIndex = -1;
     
           for (var j = 0; j < month.categories.length; j++) {
-            if (month.categories[j].name === category) {
+            if (month.categories[j].name === category.name) {
               categoryIndex = j;
               break;
             }

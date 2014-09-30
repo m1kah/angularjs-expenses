@@ -25,7 +25,7 @@ var calculateTotals = function(transactions, callback) {
       if (index >= 0) {
         var category = categories[index];
         
-        if (category.isNotExpense) {
+        if (category.type === 2) {
           amount = -amount;
         }
         if (category.amount) {
@@ -33,15 +33,19 @@ var calculateTotals = function(transactions, callback) {
         } else {
           category.amount = amount;
         }
+        
+        if (category.type !== 2) {
+          result.total += amount;
+        }
       } else {
         if (tx.category) {
           categories.push({ name: tx.category, amount: amount });
         } else {
           categories.push({ name: 'Other', amount: amount });
         }
+        
+        result.total += amount;
       }
-    
-      result.total += amount;
     }
     
     result.categories = categories;

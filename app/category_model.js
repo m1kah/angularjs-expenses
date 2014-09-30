@@ -4,7 +4,7 @@ var ObjectId = Schema.ObjectId;
 
 var Category = new Schema({
   name: { type: String },
-  isNotExpense: { type: Boolean }
+  type: { type: Number }
 });
 
 module.exports = {

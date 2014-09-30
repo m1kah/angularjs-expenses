@@ -20,8 +20,29 @@
           {{month.total | number: 2}}
         </td>
       </tr>
-      <tr ng-repeat="category in categories">
-        <th>{{category}}</th>
+      <tr class="active">
+        <th colspan="13">Income</th>
+      </tr>
+      <tr ng-repeat="category in categories | filter:income">
+        <th>{{category.name}}</th>
+        <td class="text-center" ng-repeat="month in months">
+          {{month.categoryForName(month, category) | number : 2}}
+        </td>
+      </tr>
+      <tr class="active">
+        <th colspan="13">Savings</th>
+      </tr>
+      <tr ng-repeat="category in categories | filter:saving">
+        <th>{{category.name}}</th>
+        <td class="text-center" ng-repeat="month in months">
+          {{month.categoryForName(month, category) | number : 2}}
+        </td>
+      </tr>
+      <tr class="active">
+        <th colspan="13">Expenses</th>
+      </tr>
+      <tr ng-repeat="category in categories | filter:expense">
+        <th>{{category.name}}</th>
         <td class="text-center" ng-repeat="month in months">
           {{month.categoryForName(month, category) | number : 2}}
         </td>
