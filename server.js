@@ -23,6 +23,16 @@ app.route('/api/categories/:id').put(category.update);
 var year = require('./controllers/year');
 app.route('/api/year').get(year.index);
 
+var account = require('./controllers/account');
+app.route('/api/accounts').get(account.get);
+app.route('/api/accounts').post(account.post);
+
+var person = require('./controllers/person');
+app.route('/api/persons/').get(person.get);
+app.route('/api/persons/').post(person.post);
+app.route('/api/persons/:id').delete(person.delete);
+app.route('/api/persons/:id').put(person.update);
+
 mongoose.connect('mongodb://localhost/expenses');
 mongoose.connection.on('open', function() {
   console.log('Connected to mongoose');

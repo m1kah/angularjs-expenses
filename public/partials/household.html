@@ -1,0 +1,65 @@
+<ul class="nav nav-tabs" role="tablist">
+  <li><a href="#/transactions">Transactions</a></li>
+  <li><a href="#/year">Year</a></li>
+  <li><a href="#/categories">Categories</a></li>
+  <li class="active"><a href="#/household">Household</a></li>
+</ul>
+
+<h1>Household</h1>
+<div class="row">
+  <div class="col-md-12">
+    <table class="table">
+      <tr>
+        <th>Name</th>
+        <th>Accounts</th>
+        <th>Actions</th>
+      </tr>
+      <tr ng-repeat="person in persons">
+        <td>{{person.name}}</td>
+        <td>
+          <span class="account" ng-repeat="account in person.accounts">{{account}}</span>
+        </td>
+        <td>
+          <button class="btn btn-default" ng-click="editPerson(person)">Edit</button>
+          <button class="btn btn-default" ng-click="removePerson(person)">Remove</button>
+        </td>
+      </tr>
+    </table>
+    
+    <div class="btn-toolbar" role="toolbar">
+      <button class="btn btn-primary" ng-click="addPerson()">Add</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="addDialog" modal-show="showAddPersonDialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4>Add person to household</h4>
+      </div>
+      <div class="modal-body">
+        <form role="form">
+          <div class="form-group">
+            <label for="nameInput">Name</label>
+            <input type="text" id="nameInput" class="form-control" placeholder="Mika" ng-model="nameInput">
+          </div>
+          <div class="form-group">
+            <label for="">Accounts</label>
+            <div class="checkbox" ng-repeat="account in accounts">
+              <label>
+                <input type="checkbox" ng-model="account.selected">
+                {{account.number}}
+              </label>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" ng-click="closeDialog()">Close</button>
+        <button class="btn btn-primary" ng-click="savePerson()">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

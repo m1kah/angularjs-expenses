@@ -229,6 +229,120 @@ expensesApp.directive('barsChart', function($parse) {
   };
 });
 
+expensesApp.controller('HouseholdController', function($scope, $http) {
+  $scope.persons = [];
+  $scope.accounts = [];
+  $scope.nameInput = '';
+  $scope.showAddPersonDialog = false;
+
+  $scope.findAll = function() {
+    $http.get('api/persons', {}).success(function(data) {
+      $scope.persons = data;
+    });
+  };
+  
+  $scope.savePerson = function() {
+    console.log('Adding', $scope.nameInput);
+    
+    if ($scope.person) {
+      console.log('saving person');
+      var nameInput = $scope.nameInput;
+      var selectedAccounts = $scope.accounts.filter(function(account) { return account.selected === true }).map(function (account) { return account.number });
+      var person = $scope.person;
+      person.name = nameInput;
+      person.accounts = selectedAccounts;
+      console.log('Putting person', person);
+      $http.put('api/persons/' + person._id, { person: person }).success(function(data) {
+        console.log('put done');
+        $scope.showAddPersonDialog = false;
+        $scope.findAll();
+      });
+    } else if ($scope.nameInput) {
+      console.log('adding new person');
+      var nameInput = $scope.nameInput;
+      var selectedAccounts = $scope.accounts.filter(function(account) { return account.selected === true }).map(function (account) { return account.number });
+      $scope.nameInput = '';
+      console.log('Posting person', nameInput, selectedAccounts);
+      $http.post('api/persons/', { name: nameInput, accounts: selectedAccounts }).success(function(data) {
+        console.log('post done');
+        $scope.showAddPersonDialog = false;
+        $scope.findAll();
+      });
+    }
+  };
+  
+  $scope.removePerson = function(person) {
+    $http.delete('api/persons/' + person._id, {}).success(function(data) {
+      console.log('delete done');
+      $scope.findAll();
+    });
+  };
+  
+  $scope.editPerson = function(person) {
+    $scope.nameInput = person.name;
+    $scope.showAddPersonDialog = true;
+    
+    var selectedAccounts = $scope.accounts.map(function(account) {
+      var index = person.accounts.indexOf(account.number)
+      return { number: account.number, selected: index >= 0 };
+    });
+    
+    $scope.accounts = selectedAccounts;
+    
+    $scope.person = person;
+  };
+  
+  $scope.addPerson = function() {
+    $scope.person = null;
+    $scope.showAddPersonDialog = true;
+  };
+  
+  $scope.closeDialog = function() {
+    $scope.person = null;
+    $scope.showAddPersonDialog = false;
+  };
+  
+  $scope.findAccounts = function() {
+    $http.get('api/accounts', {}).success(function(data) {
+      $scope.accounts = data;
+    });
+  };
+  
+  $scope.findAll();
+  $scope.findAccounts();
+});
+
+expensesApp.directive("modalShow", function ($parse) {
+  return {
+    restrict: "A",
+    link: function (scope, element, attrs) {
+      //Hide or show the modal
+      scope.showModal = function (visible, elem) {
+        if (!elem)
+          elem = element;
+
+        if (visible)
+          $(elem).modal("show");                     
+        else
+          $(elem).modal("hide");
+      }
+
+      //Watch for changes to the modal-visible attribute
+      scope.$watch(attrs.modalShow, function (newValue, oldValue) {
+        scope.showModal(newValue, attrs.$$element);
+      });
+
+      //Update the visible value when the dialog is closed through UI actions (Ok, cancel, etc.)
+      $(element).bind("hide.bs.modal", function () {
+        $parse(attrs.modalShow).assign(scope, false);
+        if (!scope.$$phase && !scope.$root.$$phase)
+          scope.$apply();
+      });
+    }
+  };
+});
+
+
 expensesApp.config(['$routeProvider',
   function($routeProvider) {
     $routeProvider
@@ -243,6 +357,10 @@ expensesApp.config(['$routeProvider',
       .when('/categories', {
         templateUrl: 'partials/categories.html',
         controller: 'CategoryController'
+      })
+      .when('/household', {
+        templateUrl: 'partials/household.html',
+        controller: 'HouseholdController'
       })
       .otherwise({
         redirectTo: '/transactions'
