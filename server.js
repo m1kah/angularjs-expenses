@@ -22,6 +22,7 @@ app.route('/api/categories/:id').put(category.update);
 
 var year = require('./controllers/year');
 app.route('/api/year').get(year.index);
+app.route('/api/year/:id').get(year.index);
 
 var account = require('./controllers/account');
 app.route('/api/accounts').get(account.get);

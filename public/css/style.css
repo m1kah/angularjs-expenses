@@ -6174,7 +6174,8 @@ html,
 body {
   height: 100%;
 }
-.container {
+.container,
+.container-fluid {
   background-color: #fff;
   border-left: 20px solid rgba(0, 0, 0, 0.15);
   border-right: 20px solid rgba(0, 0, 0, 0.15);
@@ -6247,4 +6248,7 @@ body {
 .months .month .total {
   padding-top: 10px;
   font-size: 12px;
+}
+.person-link {
+  cursor: pointer;
 }

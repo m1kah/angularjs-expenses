@@ -130,6 +130,9 @@ expensesApp.controller('YearController', function($scope, $http) {
   $scope.months = [];
   $scope.categories = [];
   $scope.rows = [];
+  $scope.persons = [];
+  $scope.personMonths = {};
+  $scope.personCategories = {};
   
   for (var i = 0; i < 12; i++) {
     $scope.months.push( { month: i, total: 0.0 } );
@@ -147,50 +150,112 @@ expensesApp.controller('YearController', function($scope, $http) {
     return category.type === 2;
   };
   
-  $scope.calculate = function() {
-    $http.get('api/year', {}).success(function(data) {
-      $scope.months = data;
+  $scope.processCalculationResult = function(data) {
+    for (var i = 0; i < data.length; i++) {
+      var month = data[i];
+      month.readableMonth = moment().month(data[i].month).format('MMM');
       
-      for (var i = 0; i < $scope.months.length; i++) {
-        var month = $scope.months[i];
-        month.readableMonth = moment().month($scope.months[i].month).format('MMM');
+      var categories = month.categories;
+      for (var j = 0; j < categories.length; j++) {
+        var category = categories[j];
         
-        var categories = month.categories;
-        for (var j = 0; j < categories.length; j++) {
-          var category = categories[j];
-          
-          var index = $scope.categories.map(function(c) { return c.name; }).indexOf(category.name);
-          
-          if (index < 0) {
-            $scope.categories.push(category);
+        var index = $scope.categories.map(function(c) { return c.name; }).indexOf(category.name);
+        
+        if (index < 0) {
+          $scope.categories.push(category);
+        }
+      }
+      
+      month.categoryForName = function(month, category) {
+        if (month.categories.length === 0) {
+          return 0.00;
+        }
+  
+        var categoryIndex = -1;
+  
+        for (var j = 0; j < month.categories.length; j++) {
+          if (month.categories[j].name === category.name) {
+            categoryIndex = j;
+            break;
           }
         }
-        
-        month.categoryForName = function(month, category) {
-          if (month.categories.length === 0) {
-            return 0.00;
-          }
+  
+        if (categoryIndex < 0) {
+          return 0.00;
+        }
+  
+        return month.categories[categoryIndex].amount;
+      }; // function
+    } // for
     
-          var categoryIndex = -1;
-    
-          for (var j = 0; j < month.categories.length; j++) {
-            if (month.categories[j].name === category.name) {
-              categoryIndex = j;
-              break;
-            }
-          }
-    
-          if (categoryIndex < 0) {
-            return 0.00;
-          }
-    
-          return month.categories[categoryIndex].amount;
-        }; // function
-      } // for
+    return data;
+  }
+  
+  $scope.calculate = function() {
+    $http.get('api/year', {}).success(function(data) {
+      $scope.months = $scope.processCalculationResult(data);
     });
   };
   
+  $scope.findPersons = function() {
+    $http.get('api/persons', {}).success(function(data) {
+      $scope.persons = data;
+      for (var i = 0; i < data.length; i++) {
+        $scope.calculatePerson(data[i]);
+      }
+    });
+  };
+  
+  $scope.calculatePerson = function(person) {
+    $http.get('api/year/' + person._id, {}).success(function(data) {
+      $scope.personCategories[person.name] = [];
+      $scope.personMonths[person.name] = $scope.processCalculationResultForPerson(data, person.name);
+    });
+  };
+  
+  $scope.processCalculationResultForPerson = function(data, personName) {
+    for (var i = 0; i < data.length; i++) {
+      var month = data[i];
+      month.readableMonth = moment().month(data[i].month).format('MMM');
+      
+      var categories = month.categories;
+      for (var j = 0; j < categories.length; j++) {
+        var category = categories[j];
+        
+        var index = $scope.personCategories[personName].map(function(c) { return c.name; }).indexOf(category.name);
+        
+        if (index < 0) {
+          $scope.personCategories[personName].push(category);
+        }
+      }
+      
+      month.categoryForName = function(month, category) {
+        if (month.categories.length === 0) {
+          return 0.00;
+        }
+  
+        var categoryIndex = -1;
+  
+        for (var j = 0; j < month.categories.length; j++) {
+          if (month.categories[j].name === category.name) {
+            categoryIndex = j;
+            break;
+          }
+        }
+  
+        if (categoryIndex < 0) {
+          return 0.00;
+        }
+  
+        return month.categories[categoryIndex].amount;
+      }; // function
+    } // for
+    
+    return data;
+  };
+  
   $scope.calculate();
+  $scope.findPersons();
 });
 
 expensesApp.directive('barsChart', function($parse) {
