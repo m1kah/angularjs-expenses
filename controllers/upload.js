@@ -41,6 +41,9 @@ module.exports = {
       query.booking_date = dateQuery;
       console.log('req.to_date', req.query.to_date);
     }
+    if (req.query.from_account) {
+      query.from_account = req.query.from_account;
+    }
     
     // query.booking_date = { $gte: moment('2014-08-01').toDate() };
     

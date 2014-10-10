@@ -1,7 +1,7 @@
 
 var expensesApp = angular.module('expensesApp', ['ngRoute']);
 
-expensesApp.controller('ExpensesController', function($scope, $http) {
+expensesApp.controller('TransactionController', function($scope, $http) {
   $scope.availableCategories = [ 'Food', 'Home', 'Lunch', 'Entertainment', 'Transportation' ];
   $scope.selectableCategories = [];
   $scope.chartData = [0.0, 0.0, 0.0, 0.0, 0.0];
@@ -9,12 +9,14 @@ expensesApp.controller('ExpensesController', function($scope, $http) {
   $scope.predicate = 'receiver';
   $scope.from_date = '2014-08-01'; // moment.startOf('month');
   $scope.to_date = '2014-08-30'; // moment.endOf('month');
+  $scope.from_account = '';
   
   $scope.search = function() {
     $http.get('api/transactions', {
       params: {
         from_date: $scope.from_date,
-        to_date: $scope.to_date
+        to_date: $scope.to_date,
+        from_account: $scope.from_account
     }}).success(function(data) {
       $scope.transactions = data;
       $scope.updateCategory();
@@ -413,7 +415,7 @@ expensesApp.config(['$routeProvider',
     $routeProvider
       .when('/transactions', {
         templateUrl: 'partials/transactions.html',
-        controller: 'ExpensesController'
+        controller: 'TransactionController'
       })
       .when('/year', {
         templateUrl: 'partials/year.html',
