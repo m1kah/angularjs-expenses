@@ -74,8 +74,8 @@
       </tr>
       <tr ng-repeat="category in personCategories[person.name] | filter:income">
         <th>{{category.name}}</th>
-        <td class="text-center" ng-repeat="month in months">
-          {{month.categoryForName(month, category) | number : 2}}
+        <td class="text-center" ng-repeat="personMonth in personMonths[person.name]">
+          {{month.personCategoryForName(month, category) | number : 2}}
         </td>
       </tr>
       <tr class="active">
@@ -83,8 +83,8 @@
       </tr>
       <tr ng-repeat="category in personCategories[person.name] | filter:saving">
         <th>{{category.name}}</th>
-        <td class="text-center" ng-repeat="month in months">
-          {{month.categoryForName(month, category) | number : 2}}
+        <td class="text-center" ng-repeat="month in personMonths[person.name]">
+          {{month.personCategoryForName(month, category) | number : 2}}
         </td>
       </tr>
       <tr class="active">
@@ -92,8 +92,8 @@
       </tr>
       <tr ng-repeat="category in personCategories[person.name] | filter:expense">
         <th>{{category.name}}</th>
-        <td class="text-center" ng-repeat="month in months">
-          {{month.categoryForName(month, category) | number : 2}}
+        <td class="text-center" ng-repeat="month in personMonths[person.name]">
+          {{month.personCategoryForName(month, category) | number : 2}}
         </td>
       </tr>
     </table>

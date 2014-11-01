@@ -69,7 +69,7 @@ var findTransactionAndCalculate = function(monthIndex, res, results, accounts) {
   };
   
   if (accounts) {
-    query.from_account = { $in: accounts };
+    query.from_account_number = { $in: accounts };
   }
   
   console.log('Finding transactions for %d with query %j', monthIndex, query);
@@ -80,7 +80,7 @@ var findTransactionAndCalculate = function(monthIndex, res, results, accounts) {
       results[monthIndex] = result;
     
       if (monthIndex < 11) {
-        findTransactionAndCalculate(monthIndex + 1, res, results);
+        findTransactionAndCalculate(monthIndex + 1, res, results, accounts);
       } else {
         console.log('Done find transactions');
         res.send(results).status(200).end();
@@ -99,7 +99,7 @@ module.exports = {
         if (err) {
           console.log('error', err);
           res.status(500).send(err);
-        } else if (person.accounts && person.accounts.length > 0){
+        } else if (person.accounts && person.accounts.length > 0) {
           findTransactionAndCalculate(0, res, [], person.accounts);
         } else {
           res.send({ total: 0.0, transactions: 0 }).status(200).end();

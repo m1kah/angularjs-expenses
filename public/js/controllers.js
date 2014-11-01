@@ -7,8 +7,8 @@ expensesApp.controller('TransactionController', function($scope, $http) {
   $scope.chartData = [0.0, 0.0, 0.0, 0.0, 0.0];
   
   $scope.predicate = 'receiver';
-  $scope.from_date = '2014-08-01'; // moment.startOf('month');
-  $scope.to_date = '2014-08-30'; // moment.endOf('month');
+  $scope.from_date = '2014-10-01'; // moment.startOf('month');
+  $scope.to_date = '2014-10-31'; // moment.endOf('month');
   $scope.from_account = '';
   
   $scope.search = function() {
@@ -16,7 +16,7 @@ expensesApp.controller('TransactionController', function($scope, $http) {
       params: {
         from_date: $scope.from_date,
         to_date: $scope.to_date,
-        from_account: $scope.from_account
+        from_account_number: $scope.from_account
     }}).success(function(data) {
       $scope.transactions = data;
       $scope.updateCategory();
@@ -230,8 +230,8 @@ expensesApp.controller('YearController', function($scope, $http) {
           $scope.personCategories[personName].push(category);
         }
       }
-      
-      month.categoryForName = function(month, category) {
+
+      month.personCategoryForName = function(month, category) {
         if (month.categories.length === 0) {
           return 0.00;
         }
