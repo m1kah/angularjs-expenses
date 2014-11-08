@@ -99,3 +99,23 @@
     </table>
   </div>
 </div>
+
+<div class="row">
+  <div class="col-md-12">
+    <h3>Split</h3>
+    <table class="table year">
+      <tr>
+        <th></th>
+        <th class="text-center" ng-repeat="month in months">
+          {{month.readableMonth}}
+        </th>
+      </tr>
+      <tr ng-repeat="person in persons">
+        <th>{{person.name}}</th>
+        <td class="text-center" ng-repeat="month in personMonths[person.name]">
+          {{month.personSplitForMonth(month) | number : 2}}
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>

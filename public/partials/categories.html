@@ -11,13 +11,12 @@
     <table class="table">
       <tr>
         <th>Category</th>
-        <th>Transactions</th>
         <th>Type</th>
+        <th>Household</th>
         <th>Actions</th>
       </tr>
       <tr ng-repeat="category in categories">
         <td>{{category.name}}</td>
-        <td>0</td>
         <td>
           <div class="btn-group">
             <button class="btn btn-default" ng-class="{active: category.type === 0}" ng-click="setType(category, 0)">Expense</button>
@@ -25,6 +24,9 @@
             <button class="btn btn-default" ng-class="{active: category.type === 2}" ng-click="setType(category, 2)">Saving</button>
 
           </div>  
+        </td>
+        <td>
+          <button class="btn btn-default" ng-class="{active: category.split}" ng-click="toggleSplit(category)">Split</button>
         </td>
         <td>
           <button class="btn btn-default">Rename</button>

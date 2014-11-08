@@ -125,6 +125,19 @@ expensesApp.controller('CategoryController', function($scope, $http) {
     });
   };
   
+  $scope.toggleSplit = function(category) {
+    if (category.split) {
+      category.split = !category.split;
+    } else {
+      category.split = true;
+    }
+    
+    $http.put('api/categories/' + category._id, { category: category }).success(function(data) {
+      console.log('is not expense status updated');
+      $scope.findAll();
+    });
+  }
+  
   $scope.findAll();
 });
 
@@ -135,6 +148,7 @@ expensesApp.controller('YearController', function($scope, $http) {
   $scope.persons = [];
   $scope.personMonths = {};
   $scope.personCategories = {};
+  $scope.totalSplitForMonth = {};
   
   for (var i = 0; i < 12; i++) {
     $scope.months.push( { month: i, total: 0.0 } );
@@ -250,6 +264,17 @@ expensesApp.controller('YearController', function($scope, $http) {
         }
   
         return month.categories[categoryIndex].amount;
+      }; // function
+      
+      month.personSplitForMonth = function(month) {
+        var splitAmountForMonth = 0.00;
+        for (var j = 0; j < month.categories.length; j++) {
+          var category = month.categories[j];
+          if (category.split && category.amount) {
+            splitAmountForMonth += category.amount;
+          }
+        }
+        return splitAmountForMonth;
       }; // function
     } // for
     
