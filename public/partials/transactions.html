@@ -40,16 +40,13 @@
       <button type="button" class="btn btn-default" ng-click="search()">Search</button>
     </form>
   </div>
-  <div class="col-md-3">
+  <div class="col-md-6">
     <table class="table">
       <tr ng-repeat="category in categories">
         <th>{{category.name}}</th>
         <td class="text-right">{{category.amount | number : 2}} €</td>
       </tr>
     </table>
-  </div>
-  <div class="col-md-3">
-    <bars-chart chart-data="chartData"></bars-chart>
   </div>
 </div>
 <div class="row">

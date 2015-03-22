@@ -4,7 +4,6 @@ var expensesApp = angular.module('expensesApp', ['ngRoute']);
 expensesApp.controller('TransactionController', function($scope, $http) {
   $scope.availableCategories = [ 'Food', 'Home', 'Lunch', 'Entertainment', 'Transportation' ];
   $scope.selectableCategories = [];
-  $scope.chartData = [0.0, 0.0, 0.0, 0.0, 0.0];
   
   $scope.predicate = 'receiver';
   $scope.from_date = '2014-10-01'; // moment.startOf('month');
@@ -66,12 +65,7 @@ expensesApp.controller('TransactionController', function($scope, $http) {
         category.amount += tx.amount;
         // console.log('category', tx.category);
       }
-    }
-    
-    for (var i = 0; i < $scope.categories.length; i++) {
-      $scope.chartData[i] = Math.abs($scope.categories[i].amount);
-    }
-    console.log($scope.chartData);
+    }    
   };
   
   $scope.setCategory = function(tx) {
@@ -283,42 +277,6 @@ expensesApp.controller('YearController', function($scope, $http) {
   
   $scope.calculate();
   $scope.findPersons();
-});
-
-expensesApp.directive('barsChart', function($parse) {
-  return {
-    restrict: 'E',
-    replace: false,
-    scope: {
-      chartData: '='
-    },
-    link: function($scope, element, attrs) {
-      var chart = d3.select(element[0]);
-        
-      $scope.$watch('chartData', function(newValue, oldValue) {
-        if (newValue) {
-          var total = 0.0;
-          for (var i = 0; i < newValue.length; i++) {
-            total += newValue[i];
-          }
-          
-          chart.selectAll('div').remove();
-          chart.append('div').attr('class', 'category-chart')
-            .selectAll('div')
-            .data(newValue).enter().append('div')
-            .transition().ease('elastic')
-            .style('width', function(d) { return d / total * 100.0 + '%'; })
-            .text(function(d) {
-              if (!d || d === 0) {
-                return '';
-              } else {
-                return Math.round(d / total * 100.0) + ' %';
-              }
-            });
-        }
-      }, true);
-    }
-  };
 });
 
 expensesApp.controller('HouseholdController', function($scope, $http) {
