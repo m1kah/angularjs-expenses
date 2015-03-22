@@ -6,8 +6,8 @@ expensesApp.controller('TransactionController', function($scope, $http) {
   $scope.selectableCategories = [];
   
   $scope.predicate = 'receiver';
-  $scope.from_date = '2014-10-01'; // moment.startOf('month');
-  $scope.to_date = '2014-10-31'; // moment.endOf('month');
+  $scope.from_date = moment().startOf('month').format("YYYY-MM-DD");
+  $scope.to_date = moment().endOf('month').format("YYYY-MM-DD");
   $scope.from_account = '';
   
   $scope.search = function() {
